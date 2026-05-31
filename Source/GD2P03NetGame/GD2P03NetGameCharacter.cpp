@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "GD2P03NetGame.h"
 #include "NG_Cube.h"
+#include "Net/UnrealNetwork.h"
 
 AGD2P03NetGameCharacter::AGD2P03NetGameCharacter()
 {
@@ -51,6 +52,23 @@ AGD2P03NetGameCharacter::AGD2P03NetGameCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AGD2P03NetGameCharacter::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	if (IsLocallyControlled())
+	{
+		if (HasAuthority())
+		{
+			GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, "Server: " + FString::FromInt(CubesRemaining), true, FVector2D(4,4));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Red, "Client: " + FString::FromInt(CubesRemaining), true, FVector2D(4, 4));
+		}
+	}
+}
+
 void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -68,7 +86,7 @@ void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGD2P03NetGameCharacter::Look);
 
 		// Interacting
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AGD2P03NetGameCharacter::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AGD2P03NetGameCharacter::Interact);
 	}
 	else
 	{
@@ -101,6 +119,9 @@ void AGD2P03NetGameCharacter::Interact(const FInputActionValue& Value)
 
 void AGD2P03NetGameCharacter::ServerSpawnCube_Implementation()
 {
+	if (CubesRemaining <= 0) return;
+	CubesRemaining--;
+
 	// Calculate spawn pos
 	FTransform SpawnTransform(GetActorLocation() + GetActorForwardVector() * 100.0f);
 
@@ -148,4 +169,11 @@ void AGD2P03NetGameCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AGD2P03NetGameCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AGD2P03NetGameCharacter, CubesRemaining);
 }

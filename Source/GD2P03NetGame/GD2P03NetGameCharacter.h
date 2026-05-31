@@ -56,7 +56,9 @@ protected:
 public:
 
 	/** Constructor */
-	AGD2P03NetGameCharacter();	
+	AGD2P03NetGameCharacter();
+
+	virtual void Tick(float _DeltaTime) override;
 
 protected:
 
@@ -79,6 +81,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Player")
 	TSubclassOf<class ANG_Cube> CubeClass = nullptr;
+
+	UPROPERTY(Replicated)
+	int CubesRemaining = 5;
 
 public:
 
