@@ -141,7 +141,7 @@ void UNG_GameInstance::OnJoinSessionComplete(FName _sessionName, EOnJoinSessionC
 	}
 }
 
-void DestroySession()
+void UNG_GameInstance::DestroySession()
 {
 	if (!SessionInterface.IsValid()) return;
 
