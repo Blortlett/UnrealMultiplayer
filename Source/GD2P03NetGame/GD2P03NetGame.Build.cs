@@ -18,10 +18,16 @@ public class GD2P03NetGame : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
-		});
+			"Slate",
+			"OnlineSubsystem",
+            "OnlineSubsystemUtils"
+        });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		DynamicallyLoadedModuleNames.AddRange(new string[] {
+			"OnlineSubsystemNull",
+        });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"GD2P03NetGame"
