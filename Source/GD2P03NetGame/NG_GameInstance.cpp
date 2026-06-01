@@ -119,7 +119,8 @@ void UNG_GameInstance::OnFindSessionsComplete(bool _bSuccess)
 
 	for (size_t i = 0; i < SessionSearch->SearchResults.Num(); i++)
 	{
-		FString::Printf(TEXT("Session Number: %d | Session Name: %s"), i+1, *SessionSearch->SearchResults[i].Session.OwningUserName);
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
+			FString::Printf(TEXT("Session Number: %d | Session Name: %s"), i+1, *SessionSearch->SearchResults[i].Session.OwningUserName));
 	}
 }
 
@@ -128,7 +129,7 @@ void UNG_GameInstance::OnJoinSessionComplete(FName _sessionName, EOnJoinSessionC
 	if (!SessionInterface.IsValid()) return;
 
 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
-		FString::Printf(TEXT("OnJoinSessionComplete $s, %d"), *_sessionName.ToString(), static_cast<int32>(_result)));
+		FString::Printf(TEXT("OnJoinSessionComplete %s, %d"), *_sessionName.ToString(), static_cast<int32>(_result)));
 	if (!SessionInterface.IsValid()) return;
 
 	APlayerController* const PlayerController = GetFirstLocalPlayerController();
