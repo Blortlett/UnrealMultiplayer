@@ -21,7 +21,7 @@ void UNG_GameInstance::Init()
 	}
 }
 
-bool UNG_GameInstance::HostSession(TSharedPtr<const FUniqueNetID> _userID, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers)
+bool UNG_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> _userID, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers)
 {
 	if (!SessionInterface.IsValid() || !_userID.IsValid()) return false;
 
@@ -39,7 +39,7 @@ bool UNG_GameInstance::HostSession(TSharedPtr<const FUniqueNetID> _userID, FName
 
 	SessionSettings->Set(SETTING_MAPNAME, FString("Lvl_ThirdPerson"), EOnlineDataAdvertisementType::ViaOnlineService);
 
-	return SessionSettings->CreateSession(*_userId, _sessionName, *SessionSettings);
+	return SessionInterface->CreateSession(*_userID, _sessionName, *SessionSettings);
 }
 
 void UNG_GameInstance::OnCreateSessionComplete(FName _sessionName, bool _bSuccess)

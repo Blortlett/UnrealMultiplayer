@@ -26,6 +26,7 @@ protected:
 	virtual void Init() override;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	TSharedPtr<FOnlineSessionSettings> SessionSettings;
 
-	bool HostSession(TSharedPtr<const FUniqueNetID> _userID, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers);
+	bool HostSession(TSharedPtr<const FUniqueNetId> _userID, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers);
 };
