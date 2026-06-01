@@ -20,7 +20,8 @@ public class GD2P03NetGame : ModuleRules
 			"UMG",
 			"Slate",
 			"OnlineSubsystem",
-            "OnlineSubsystemUtils"
+            "OnlineSubsystemUtils",
+			"NetCore"
         });
 
 		DynamicallyLoadedModuleNames.AddRange(new string[] {

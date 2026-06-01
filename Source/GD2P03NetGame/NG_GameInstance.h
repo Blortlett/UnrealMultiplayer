@@ -28,5 +28,22 @@ protected:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	TSharedPtr<FOnlineSessionSettings> SessionSettings;
 
-	bool HostSession(TSharedPtr<const FUniqueNetId> _userID, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers);
+	UFUNCTION()
+	void NetworkFailureHappened(UWorld* _world, UNetDriver* _netDriver, ENetworkFailure::Type _failureType, const FString& _errorString);
+
+	UFUNCTION(BlueprintCallable)
+	void StartGame(bool _bLAN);
+
+	UFUNCTION(BlueprintCallable)
+	void FindGames(bool _bLAN);
+
+	UFUNCTION(BlueprintCallable)
+	void JoinGame(int _iServerIndex);
+
+	UFUNCTION(BlueprintCallable)
+	void DestroySession();
+
+	bool HostSession(TSharedPtr<const FUniqueNetId> _userId, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers);
+	void FindSessions(TSharedPtr <const FUniqueNetId> _userId, bool _bIsLan, bool _bIsPresence);
+	bool JoinSession(TSharedPtr<const FUniqueNetId> _userId, FName _sessionName, const FOnlineSessionSearchResult& _searchResult);
 };
