@@ -56,17 +56,20 @@ void AGD2P03NetGameCharacter::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	if (HasAuthority)
+	{
+		ControlPitch = GetControlRotation().Pitch;
+	}
+}
+
+float AGD2P03NetGameCharacter::GetReplicatedPitch()
+{
 	if (IsLocallyControlled())
 	{
-		if (HasAuthority())
-		{
-			GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Green, "Server: " + FString::FromInt(CubesRemaining), true, FVector2D(4,4));
-		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Red, "Client: " + FString::FromInt(CubesRemaining), true, FVector2D(4, 4));
-		}
+		return GetControlRotation().Pitch;
 	}
+
+	return 0.0f;
 }
 
 void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -176,4 +179,5 @@ void AGD2P03NetGameCharacter::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AGD2P03NetGameCharacter, CubesRemaining);
+	DOREPLIFETIME(AGD2P03NetGameCharacter, ControlPitch);
 }

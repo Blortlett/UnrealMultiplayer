@@ -53,12 +53,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
 
+	UPROPERTY(Replicated)
+	float ControlPitch = 0.f;
+
 public:
 
 	/** Constructor */
 	AGD2P03NetGameCharacter();
 
 	virtual void Tick(float _DeltaTime) override;
+
+	UFUNCTION(BlueprintPure)
+	float GetReplicatedPitch();
 
 protected:
 
