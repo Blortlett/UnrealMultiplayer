@@ -56,9 +56,9 @@ void AGD2P03NetGameCharacter::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	if (HasAuthority)
+	if (HasAuthority())
 	{
-		ControlPitch = GetControlRotation().Pitch;
+		ControlPitch = FRotator::NormalizeAxis(GetControlRotation().Pitch);
 	}
 }
 
@@ -66,10 +66,10 @@ float AGD2P03NetGameCharacter::GetReplicatedPitch()
 {
 	if (IsLocallyControlled())
 	{
-		return GetControlRotation().Pitch;
+		return FRotator::NormalizeAxis(GetControlRotation().Pitch);
 	}
 
-	return 0.0f;
+	return ControlPitch;
 }
 
 void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
