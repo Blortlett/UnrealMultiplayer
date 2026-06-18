@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "GD2P03NetGame.h"
 #include "NG_Cube.h"
+#include "NG_Projectile.h"
 #include "Net/UnrealNetwork.h"
 
 AGD2P03NetGameCharacter::AGD2P03NetGameCharacter()
@@ -90,6 +91,9 @@ void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 
 		// Interacting
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AGD2P03NetGameCharacter::Interact);
+
+		// Attacking
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AGD2P03NetGameCharacter::Attack);
 	}
 	else
 	{
@@ -118,6 +122,23 @@ void AGD2P03NetGameCharacter::Look(const FInputActionValue& Value)
 void AGD2P03NetGameCharacter::Interact(const FInputActionValue& Value)
 {
 	ServerSpawnCube();
+}
+
+void AGD2P03NetGameCharacter::Attack(const FInputActionValue& Value)
+{
+
+}
+
+void AGD2P03NetGameCharacter::ServerAttack_Implementation()
+{
+	FTransform SpawnTransform;
+	SpawnTransform.SetLocation(GetMesh()->GetBoneLocation("hand_l"));
+	SpawnTransform.SetRotation(GetControlRotation().Quaternion());
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	GetWorld()->SpawnActor<ANG_Projectile>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
 void AGD2P03NetGameCharacter::ServerSpawnCube_Implementation()

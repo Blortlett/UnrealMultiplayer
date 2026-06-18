@@ -53,8 +53,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
 
+	/** Attack Input Action */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* AttackAction;
+
+	// Projectile class to spawn when attacking
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	TSubclassOf<class ANG_Projectile> ProjectileClass = nullptr;
+
 	UPROPERTY(Replicated)
 	float ControlPitch = 0.f;
+
+	UFUNCTION(Server, Reliable)
+	void ServerAttack();
 
 public:
 
@@ -81,6 +92,9 @@ protected:
 
 	/** Called for interacting input */
 	void Interact(const FInputActionValue& Value);
+
+	/** Called for attack input */
+	void Attack(const FInputActionValue& Value);
 
 	UFUNCTION(Server, Reliable)
 	void ServerSpawnCube();
