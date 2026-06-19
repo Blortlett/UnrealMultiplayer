@@ -100,6 +100,7 @@ protected:
 
 	void Die();
 
+	UPROPERTY(Replicated)
 	float Health = 100.f;
 
 	UFUNCTION(Server, Reliable)

@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* SphereCollision = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category(Projectile))
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float Damage = 20.f;
 
 
