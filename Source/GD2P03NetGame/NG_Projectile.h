@@ -28,6 +28,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* SphereCollision = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category(Projectile))
+	float Damage = 20.f;
+
+
+	UFUNCTION()
+	void OnProjectileHit(UPrimitiveComponent* _thisHitComp, AActor* _otherActor,
+		UPrimitiveComponent* _otherHitComp, FVector _normalImpulse,
+		const FHitResult& _hitResult);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

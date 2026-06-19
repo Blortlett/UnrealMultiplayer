@@ -64,9 +64,6 @@ protected:
 	UPROPERTY(Replicated)
 	float ControlPitch = 0.f;
 
-	UFUNCTION(Server, Reliable)
-	void ServerAttack();
-
 public:
 
 	/** Constructor */
@@ -76,6 +73,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	float GetReplicatedPitch();
+
+	void NG_TakeDamage(float _damage);
 
 protected:
 
@@ -95,6 +94,13 @@ protected:
 
 	/** Called for attack input */
 	void Attack(const FInputActionValue& Value);
+
+	UFUNCTION(Server, Reliable)
+	void ServerAttack();
+
+	void Die();
+
+	float Health = 100.f;
 
 	UFUNCTION(Server, Reliable)
 	void ServerSpawnCube();

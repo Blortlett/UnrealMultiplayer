@@ -73,6 +73,16 @@ float AGD2P03NetGameCharacter::GetReplicatedPitch()
 	return ControlPitch;
 }
 
+void AGD2P03NetGameCharacter::NG_TakeDamage(float _damage)
+{
+	Health -= _damage;
+
+	if (Health <= 0.f)
+	{
+		Die();
+	}
+}
+
 void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -126,7 +136,12 @@ void AGD2P03NetGameCharacter::Interact(const FInputActionValue& Value)
 
 void AGD2P03NetGameCharacter::Attack(const FInputActionValue& Value)
 {
+	ServerAttack();
+}
 
+void AGD2P03NetGameCharacter::Die()
+{
+	Destroy();
 }
 
 void AGD2P03NetGameCharacter::ServerAttack_Implementation()
@@ -201,4 +216,5 @@ void AGD2P03NetGameCharacter::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 	DOREPLIFETIME(AGD2P03NetGameCharacter, CubesRemaining);
 	DOREPLIFETIME(AGD2P03NetGameCharacter, ControlPitch);
+	DOREPLIFETIME(AGD2P03NetGameCharacter, Health);
 }

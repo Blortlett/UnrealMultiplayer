@@ -4,6 +4,7 @@
 #include "NG_Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "GD2P03NetGameCharacter.h"
 
 // Sets default values
 ANG_Projectile::ANG_Projectile()
@@ -12,8 +13,11 @@ ANG_Projectile::ANG_Projectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile Movement");
+
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Sphere Collision");
+	SphereCollision->OnComponentHit.AddDynamic(this, &ThisClass::OnProjectileHit);
 	RootComponent = SphereCollision;
+
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>("Projectile Mesh");
 	ProjectileMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -27,6 +31,26 @@ void ANG_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
+	SphereCollision->IgnoreActorWhenMoving(GetOwner(), true);
+
+	if (AGD2P03NetGameCharacter* OwnerCharacter = GetOwner<AGD2P03NetGameCharacter>())
+	{
+		OwnerCharacter->MoveIgnoreActorAdd(this);
+	}
+}
+
+void ANG_Projectile::OnProjectileHit(UPrimitiveComponent* _thisHitComp, AActor* _otherActor, UPrimitiveComponent* _otherHitComp, FVector _normalImpulse, const FHitResult& _hitResult)
+{
+	if (HasAuthority())
+	{
+		if (AGD2P03NetGameCharacter* HitCharacter = Cast<AGD2P03NetGameCharacter>(_otherActor))
+		{
+			HitCharacter->NG_TakeDamage(Damage);
+		}
+		
+		Destroy();
+	}
 }
 
 // Called every frame
