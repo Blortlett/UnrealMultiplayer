@@ -15,6 +15,7 @@ ANG_Projectile::ANG_Projectile()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile Movement");
 
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Sphere Collision");
+	SphereCollision->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	SphereCollision->OnComponentHit.AddDynamic(this, &ThisClass::OnProjectileHit);
 	RootComponent = SphereCollision;
 
