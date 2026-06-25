@@ -20,7 +20,7 @@ public class GD2P03NetGame : ModuleRules
 			"UMG",
 			"Slate",
 			"OnlineSubsystem",
-            "OnlineSubsystemUtils",
+            "OnlineSubsystemSteam",
 			"NetCore"
         });
 

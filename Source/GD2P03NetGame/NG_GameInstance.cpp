@@ -71,6 +71,8 @@ bool UNG_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> _userId, FName
 	SessionSettings->bShouldAdvertise = true;
 	SessionSettings->bAllowJoinViaPresence = true;
 	SessionSettings->bAllowJoinViaPresenceFriendsOnly = false;
+	SessionSettings->bUseLobbiesIfAvailable = true;
+	SessionSettings->Set(SEARCH_KEYWORDS, FString("JohnsGame"), EOnlineDataAdvertisementType::ViaOnlineService);
 
 	SessionSettings->Set(SETTING_MAPNAME, FString("Lvl_ThirdPerson"), EOnlineDataAdvertisementType::ViaOnlineService);
 
@@ -97,6 +99,8 @@ void UNG_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> _userId, bool
 	SessionSearch->bIsLanQuery = _bIsLan;
 	SessionSearch->MaxSearchResults = 10000;
 	SessionSearch->PingBucketSize = 50;
+	SessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
+	SessionSearch->QuerySettings.Set(SEARCH_KEYWORDS, FString("JohnsGame"), EOnlineComparisonOp::Equals);
 
 	SessionInterface->FindSessions(*_userId, SessionSearch.ToSharedRef());
 }
