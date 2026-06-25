@@ -46,4 +46,15 @@ protected:
 	bool HostSession(TSharedPtr<const FUniqueNetId> _userId, FName _sessionName, bool _bIsLAN, bool _bIsPresence, int32 _maxNumPlayers);
 	void FindSessions(TSharedPtr <const FUniqueNetId> _userId, bool _bIsLan, bool _bIsPresence);
 	bool JoinSession(TSharedPtr<const FUniqueNetId> _userId, FName _sessionName, const FOnlineSessionSearchResult& _searchResult);
+
+public:
+
+	UPROPERTY(BlueprintReadWrite)
+	FString FindSessionResultText = "";
+
+	UPROPERTY(BlueprintReadWrite)
+	FString NumSearchResultText = "";
+
+	UPROPERTY(BlueprintReadWrite)
+	FString JoinSessionResultText = "";
 };

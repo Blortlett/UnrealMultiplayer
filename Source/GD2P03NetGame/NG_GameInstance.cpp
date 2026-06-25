@@ -114,26 +114,27 @@ bool UNG_GameInstance::JoinSession(TSharedPtr<const FUniqueNetId> _userId, FName
 
 void UNG_GameInstance::OnFindSessionsComplete(bool _bSuccess)
 {
+	NumSearchResultText = FString::Printf(TEXT("Num Search Results: %d"), SessionSearch->SearchResults.Num());
+
 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
 		FString::Printf(TEXT("FindSessionsComplete bSuccess: %d"), _bSuccess));
 	if (!SessionInterface.IsValid()) return;
 
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
-		FString::Printf(TEXT("Num Search Results: %d"), SessionSearch->SearchResults.Num()));
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, NumSearchResultText);
 
 	for (size_t i = 0; i < SessionSearch->SearchResults.Num(); i++)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
-			FString::Printf(TEXT("Session Number: %d | Session Name: %s"), i+1, *SessionSearch->SearchResults[i].Session.OwningUserName));
+		FindSessionResultText = FString::Printf(TEXT("Session Number: %d | Session Name: %s"), i + 1, *SessionSearch->SearchResults[i].Session.OwningUserName);
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FindSessionResultText);
 	}
 }
 
 void UNG_GameInstance::OnJoinSessionComplete(FName _sessionName, EOnJoinSessionCompleteResult::Type _result)
 {
-	if (!SessionInterface.IsValid()) return;
+	JoinSessionResultText = FString::Printf(TEXT("OnJoinSessionComplete %s, %d"), *_sessionName.ToString(), static_cast<int32>(_result));
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, JoinSessionResultText);
 
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
-		FString::Printf(TEXT("OnJoinSessionComplete %s, %d"), *_sessionName.ToString(), static_cast<int32>(_result)));
 	if (!SessionInterface.IsValid()) return;
 
 	APlayerController* const PlayerController = GetFirstLocalPlayerController();
