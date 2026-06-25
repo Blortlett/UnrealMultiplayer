@@ -74,6 +74,8 @@ bool UNG_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> _userId, FName
 	SessionSettings->bUseLobbiesIfAvailable = true;
 	SessionSettings->Set(SEARCH_KEYWORDS, FString("JohnsGame"), EOnlineDataAdvertisementType::ViaOnlineService);
 
+	SessionSettings->Set(FName("SERVER_NAME"), FString("John's Server"), EOnlineDataAdvertisementType::ViaOnlineService);
+
 	SessionSettings->Set(SETTING_MAPNAME, FString("Lvl_ThirdPerson"), EOnlineDataAdvertisementType::ViaOnlineService);
 
 	return SessionInterface->CreateSession(*_userId, _sessionName, *SessionSettings);
@@ -124,7 +126,10 @@ void UNG_GameInstance::OnFindSessionsComplete(bool _bSuccess)
 
 	for (size_t i = 0; i < SessionSearch->SearchResults.Num(); i++)
 	{
-		FindSessionResultText = FString::Printf(TEXT("Session Number: %d | Session Name: %s"), i + 1, *SessionSearch->SearchResults[i].Session.OwningUserName);
+		FString ServerName;
+		SessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("SERVER_NAME"), ServerName);
+
+		FindSessionResultText = FString::Printf(TEXT("Session Number: %d | Session Name: %s"), int32(i + 1), *ServerName);
 
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FindSessionResultText);
 	}
