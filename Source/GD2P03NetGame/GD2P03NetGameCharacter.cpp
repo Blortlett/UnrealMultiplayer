@@ -14,6 +14,8 @@
 #include "NG_Cube.h"
 #include "NG_Projectile.h"
 #include "Net/UnrealNetwork.h"
+#include "GD2P03NetGamePlayerController.h"
+#include "NG_PlayerState.h"
 
 AGD2P03NetGameCharacter::AGD2P03NetGameCharacter()
 {
@@ -73,12 +75,14 @@ float AGD2P03NetGameCharacter::GetReplicatedPitch()
 	return ControlPitch;
 }
 
-void AGD2P03NetGameCharacter::NG_TakeDamage(float _damage)
+void AGD2P03NetGameCharacter::NG_TakeDamage(float _damage, ANG_PlayerState* _playerThatDealthDamage)
 {
 	Health -= _damage;
 
 	if (Health <= 0.f)
 	{
+		Health = 0.f;
+		_playerThatDealthDamage->GiveElimination();
 		Die();
 	}
 }
@@ -141,6 +145,7 @@ void AGD2P03NetGameCharacter::Attack(const FInputActionValue& Value)
 
 void AGD2P03NetGameCharacter::Die()
 {
+	GetController<AGD2P03NetGamePlayerController>()->RespawnAfterDelay();
 	Destroy();
 }
 

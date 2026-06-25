@@ -74,7 +74,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetReplicatedPitch();
 
-	void NG_TakeDamage(float _damage);
+	void NG_TakeDamage(float _damage, class ANG_PlayerState* _playerThatDealtDamage);
 
 protected:
 

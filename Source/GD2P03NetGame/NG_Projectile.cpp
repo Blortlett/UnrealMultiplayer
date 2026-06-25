@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "GD2P03NetGameCharacter.h"
+#include "NG_PlayerState.h"
 
 // Sets default values
 ANG_Projectile::ANG_Projectile()
@@ -38,6 +39,8 @@ void ANG_Projectile::BeginPlay()
 	if (AGD2P03NetGameCharacter* OwnerCharacter = GetOwner<AGD2P03NetGameCharacter>())
 	{
 		OwnerCharacter->MoveIgnoreActorAdd(this);
+
+		OwnerPlayerState = OwnerCharacter->GetPlayerState<ANG_PlayerState>();
 	}
 }
 
@@ -47,7 +50,7 @@ void ANG_Projectile::OnProjectileHit(UPrimitiveComponent* _thisHitComp, AActor* 
 	{
 		if (AGD2P03NetGameCharacter* HitCharacter = Cast<AGD2P03NetGameCharacter>(_otherActor))
 		{
-			HitCharacter->NG_TakeDamage(Damage);
+			HitCharacter->NG_TakeDamage(Damage, OwnerPlayerState);
 		}
 		
 		Destroy();

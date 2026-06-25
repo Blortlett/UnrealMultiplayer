@@ -9,6 +9,8 @@
 #include "GD2P03NetGame.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
+#include "NG_GameMode_Match.h"
+
 void AGD2P03NetGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -24,7 +26,8 @@ void AGD2P03NetGamePlayerController::BeginPlay()
 			// add the controls to the player screen
 			MobileControlsWidget->AddToPlayerScreen(0);
 
-		} else {
+		}
+		else {
 
 			UE_LOG(LogGD2P03NetGame, Error, TEXT("Could not spawn mobile controls widget."));
 
@@ -64,4 +67,18 @@ bool AGD2P03NetGamePlayerController::ShouldUseTouchControls() const
 {
 	// are we on a mobile platform? Should we force touch?
 	return SVirtualJoystick::ShouldDisplayTouchInterface() || bForceTouchControls;
+}
+
+void AGD2P03NetGamePlayerController::RespawnAfterDelay()
+{
+	GetWorldTimerManager().SetTimer(RespawnTimer, this, &AGD2P03NetGamePlayerController::TryRespawn, 3.f, false);
+}
+
+void AGD2P03NetGamePlayerController::TryRespawn()
+{
+	// TODO: Get the game mode, ask the game mode to respawn this controller
+	if (ANG_GameMode_Match* MatchGameMode = GetWorld()->GetAuthGameMode<ANG_GameMode_Match>())
+	{
+		MatchGameMode->RespawnPlayer(this);
+	}
 }

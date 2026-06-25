@@ -37,6 +37,7 @@ protected:
 		UPrimitiveComponent* _otherHitComp, FVector _normalImpulse,
 		const FHitResult& _hitResult);
 
+	class ANG_PlayerState* OwnerPlayerState = nullptr;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
