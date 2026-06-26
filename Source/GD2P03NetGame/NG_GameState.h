@@ -21,8 +21,20 @@ protected:
 
 public:
 
+	// Set by the GameMode in InitGameState; replicated so clients can show "(x/y)".
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Match")
+	int32 MinPlayersToStart = 2;
+
 	void SetWinner(class ANG_PlayerState* _winner);
 
 	UFUNCTION(BlueprintPure)
 	ANG_PlayerState* GetWinner();
+
+	// True while the level is loaded but the match has not started (lobby fill).
+	UFUNCTION(BlueprintPure, Category = "Match")
+	bool IsWaitingForPlayers() const;
+
+	// Current connected player count (replicated PlayerArray) — for the lobby overlay.
+	UFUNCTION(BlueprintPure, Category = "Match")
+	int32 GetNumConnectedPlayers() const;
 };

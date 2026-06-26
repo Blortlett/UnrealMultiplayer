@@ -36,6 +36,23 @@ void ANG_GameMode_Match::CheckForWinner()
 	}
 }
 
+bool ANG_GameMode_Match::ReadyToStartMatch_Implementation()
+{
+	// Only start once the lobby has filled to the minimum. Until then the level is
+	// loaded and players can move around, but the match stays in WaitingToStart.
+	return GetMatchState() == MatchState::WaitingToStart && NumPlayers >= MinPlayersToStart;
+}
+
+void ANG_GameMode_Match::InitGameState()
+{
+	Super::InitGameState();
+
+	if (ANG_GameState* NGGameState = GetGameState<ANG_GameState>())
+	{
+		NGGameState->MinPlayersToStart = MinPlayersToStart;
+	}
+}
+
 void ANG_GameMode_Match::HandleMatchHasEnded()
 {
 	GetWorldTimerManager().SetTimer(MatchRestartDelayTimer, this, &AGameMode::RestartGame, 5.0f, false);
