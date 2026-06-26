@@ -77,14 +77,32 @@ float AGD2P03NetGameCharacter::GetReplicatedPitch()
 
 void AGD2P03NetGameCharacter::NG_TakeDamage(float _damage, ANG_PlayerState* _playerThatDealthDamage)
 {
+	// Runs on the server (called from the projectile's authoritative hit)
 	Health -= _damage;
+
+	// Tell everyone to play impermanent hit feedback, and the victim to flash their HUD
+	MulticastOnHit(GetActorLocation());
+	ClientOnTookDamage();
 
 	if (Health <= 0.f)
 	{
 		Health = 0.f;
-		_playerThatDealthDamage->GiveElimination();
+		if (_playerThatDealthDamage)
+		{
+			_playerThatDealthDamage->GiveElimination();
+		}
 		Die();
 	}
+}
+
+void AGD2P03NetGameCharacter::MulticastOnHit_Implementation(FVector _hitLocation)
+{
+	BP_OnHit(_hitLocation);
+}
+
+void AGD2P03NetGameCharacter::ClientOnTookDamage_Implementation()
+{
+	BP_OnTookDamageLocal();
 }
 
 void AGD2P03NetGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

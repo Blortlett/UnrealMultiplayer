@@ -15,14 +15,15 @@ void ANG_GameMode_Match::RespawnPlayer(APlayerController* _playerToRespawn)
 
 void ANG_GameMode_Match::CheckForWinner()
 {
-	// Check if any player has enough eliminations to win
+	// Check if any player has reached the score required to win.
+	// Score is gained through the control point (a non-elimination interaction).
 	if (ANG_GameState* NGGameState = GetGameState<ANG_GameState>())
 	{
 		for (auto iter : NGGameState->PlayerArray)
 		{
 			if (ANG_PlayerState* PlayerState = Cast<ANG_PlayerState>(iter))
 			{
-				if (PlayerState->GetEliminations() >= 5)
+				if (PlayerState->GetCaptureScore() >= ScoreToWin)
 				{
 					NGGameState->SetWinner(PlayerState);
 

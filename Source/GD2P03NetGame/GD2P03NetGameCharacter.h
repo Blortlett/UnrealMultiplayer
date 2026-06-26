@@ -76,6 +76,13 @@ public:
 
 	void NG_TakeDamage(float _damage, class ANG_PlayerState* _playerThatDealtDamage);
 
+	// HUD accessors
+	UFUNCTION(BlueprintPure)
+	float GetHealth() const { return Health; }
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const { return MaxHealth; }
+
 protected:
 
 	/** Initialize input action bindings */
@@ -99,6 +106,24 @@ protected:
 	void ServerAttack();
 
 	void Die();
+
+	// Multicast: impermanent feedback shown to ALL players when this character is hit
+	// (designer plays particle/sound in BP_OnHit).
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastOnHit(FVector _hitLocation);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void BP_OnHit(FVector HitLocation);
+
+	// Client: feedback only the damaged player should see (e.g. HUD damage flash).
+	UFUNCTION(Client, Unreliable)
+	void ClientOnTookDamage();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void BP_OnTookDamageLocal();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	float MaxHealth = 100.f;
 
 	UPROPERTY(Replicated)
 	float Health = 100.f;

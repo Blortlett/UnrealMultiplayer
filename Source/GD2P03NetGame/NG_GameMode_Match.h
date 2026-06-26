@@ -19,6 +19,11 @@ public:
 
 	void CheckForWinner();
 
+	// Score a player must reach to win the match (brief minimum: 3).
+	// Exposed so the host can configure it before the session begins.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Match")
+	int ScoreToWin = 3;
+
 protected:
 	virtual void HandleMatchHasEnded() override;
 
