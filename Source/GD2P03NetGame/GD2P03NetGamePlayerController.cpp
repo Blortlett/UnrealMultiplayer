@@ -10,6 +10,7 @@
 #include "Widgets/Input/SVirtualJoystick.h"
 
 #include "NG_GameMode_Match.h"
+#include "NG_PlayerState.h"
 
 void AGD2P03NetGamePlayerController::BeginPlay()
 {
@@ -72,6 +73,16 @@ bool AGD2P03NetGamePlayerController::ShouldUseTouchControls() const
 void AGD2P03NetGamePlayerController::RespawnAfterDelay()
 {
 	GetWorldTimerManager().SetTimer(RespawnTimer, this, &AGD2P03NetGamePlayerController::TryRespawn, 3.f, false);
+}
+
+int AGD2P03NetGamePlayerController::GetLocalCaptureScore() const
+{
+	if (ANG_PlayerState* NGPlayerState = GetPlayerState<ANG_PlayerState>())
+	{
+		return NGPlayerState->GetCaptureScore();
+	}
+
+	return 0;
 }
 
 void AGD2P03NetGamePlayerController::TryRespawn()

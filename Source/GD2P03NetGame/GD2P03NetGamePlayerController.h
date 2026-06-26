@@ -55,4 +55,10 @@ protected:
 
 public:
 	void RespawnAfterDelay();
+
+	// HUD helper: the capture score of THIS (local) player's state.
+	// The widget is owned by the local controller, so calling this from
+	// "Get Owning Player" guarantees each screen shows its own score.
+	UFUNCTION(BlueprintPure, Category = "HUD")
+	int GetLocalCaptureScore() const;
 };
